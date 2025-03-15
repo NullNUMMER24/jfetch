@@ -6,6 +6,8 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+
+	"github.com/common-nighthawk/go-figure"
 )
 
 func getOS() string {
@@ -50,19 +52,6 @@ func getUptime() (string, error) {
 	return strings.TrimSpace(string(output)), nil
 }
 
-func getAsciiArt(osName string) string {
-	switch osName {
-	case "linux":
-		return `Linux------------------------------------`
-	case "darwin":
-		return `Darwin-----------------------------------`
-	case "windows":
-		return `Windows----------------------------------`
-	default:
-		return "Unknown OS"
-	}
-}
-
 func main() {
 	osName := getOS()
 	hostname, err := getHostName()
@@ -82,7 +71,11 @@ func main() {
 		return
 	}
 
-	fmt.Println(getAsciiArt(osName))
+	fmt.Printf("\033[38;5;9m\033[48;5;16m")
+	myFigure := figure.NewFigure(hostname, "alligator", true)
+	myFigure.Print()
+	fmt.Printf("\033[0m")
+
 	fmt.Printf("OS: %s\n", strings.Title(osName))
 	fmt.Printf("Host: %s\n", hostname)
 	fmt.Printf("User:  %s\n", user)
